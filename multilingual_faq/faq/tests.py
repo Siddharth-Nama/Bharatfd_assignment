@@ -9,7 +9,8 @@ class FAQModelTest(TestCase):
             question="What is Django?",
             answer="<p>Django is a Python web framework.</p>",
             question_hi="डीजैंगो क्या है?",
-            question_bn="ডিজাঙ্গো কি?"
+            question_bn="ডিজাঙ্গো কি?",
+            question_fr="Qu'est-ce que Django?"
         )
 
     def test_faq_creation(self):
@@ -18,11 +19,14 @@ class FAQModelTest(TestCase):
         self.assertEqual(faq.question, "What is Django?")
         self.assertEqual(faq.question_hi, "डीजैंगो क्या है?")
         self.assertEqual(faq.question_bn, "ডিজাঙ্গো কি?")
+        self.assertEqual(faq.question_fr, "Qu'est-ce que Django?")
 
     def test_translation_method(self):
         """Test if translation retrieval works"""
         faq = FAQ.objects.get(question="What is Django?")
         self.assertEqual(faq.get_translated_question("hi"), "डीजैंगो क्या है?")
         self.assertEqual(faq.get_translated_question("bn"), "ডিজাঙ্গো কি?")
-        self.assertEqual(faq.get_translated_question("fr"), "What is Django?")  # Default to English
+        self.assertEqual(faq.get_translated_question("fr"), "Qu'est-ce que Django?")
+        self.assertEqual(faq.get_translated_question("es"), "What is Django?")  # Default to English
+        
 
