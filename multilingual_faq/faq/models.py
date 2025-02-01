@@ -1,6 +1,7 @@
 from django.db import models
 from ckeditor.fields import RichTextField
 from googletrans import Translator
+from django.core.cache import cache
 
 class FAQ(models.Model):
     question = models.TextField()
@@ -28,3 +29,18 @@ class FAQ(models.Model):
 
     def __str__(self):
         return self.question
+
+
+def get_translated_question(self, lang="en"):
+    faq_translation_key = f"faq_{self.id}_question_{lang}"
+    translated_text = cache.get(faq_translation_key )
+
+    if not translated_text:
+        translations = {
+            "hi": self.question_hi,
+            "bn": self.question_bn,
+        }
+        translated_text = translations.get(lang, self.question)
+        cache.set('faq_translation_key', translated_text, timeout=3600)  # Cache for 1 hour
+
+    return translated_text
